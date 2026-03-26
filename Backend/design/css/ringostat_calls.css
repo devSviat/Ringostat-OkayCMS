@@ -1,0 +1,832 @@
+/* ========== Форма "Завантажити з Ringostat" ========== */
+.fn_ringostat_sync_form {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+}
+
+.fn_ringostat_cb_wrap {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-right: 16px;
+}
+
+.fn_ringostat_cb_label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    cursor: pointer;
+    font-weight: normal;
+    user-select: none;
+    line-height: 1;
+    min-height: 28px;
+}
+
+.fn_ringostat_cb_input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.fn_ringostat_cb_box {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    border: 1px solid #adb5bd;
+    border-radius: 3px;
+    background: #fff;
+    transition: border-color .15s, background-color .15s;
+}
+
+.fn_ringostat_cb_label:hover .fn_ringostat_cb_box { border-color: #00a7ef; }
+
+.fn_ringostat_cb_input:focus + .fn_ringostat_cb_label .fn_ringostat_cb_box {
+    box-shadow: 0 0 0 2px rgba(0, 167, 239, .25);
+}
+
+.fn_ringostat_cb_input:checked + .fn_ringostat_cb_label .fn_ringostat_cb_box {
+    background: #00a7ef url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 6l3 3 5-6'/%3E%3C/svg%3E") center/12px 12px no-repeat;
+    border-color: #00a7ef;
+}
+
+/* ========== Рядок фільтрів ========== */
+.fn_ringostat_filter_row .fn_ringostat_filters {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 10px;
+    width: 100%;
+}
+
+.fn_ringostat_filter_row .fn_filter_item {
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+.fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_item:first-of-type { width: 140px; }
+.fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_item:nth-of-type(2) { width: 160px; }
+.fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_item:nth-of-type(3) { width: 130px; }
+
+.fn_ringostat_filter_row .fn_filter_item_btn {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.fn_ringostat_filter_row .fn_filter_item .form-control { width: 100%; }
+
+.fn_ringostat_filter_row .fn_filter_sep {
+    flex: 0 0 auto;
+    align-self: center;
+    padding: 0 4px;
+    color: #999;
+}
+
+/* Блок "дата з — дата по" в один ряд */
+.fn_ringostat_date_range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.fn_ringostat_date_range .fn_filter_item {
+    width: 150px;
+}
+
+.fn_ringostat_date_range .fn_filter_sep {
+    flex: 0 0 auto;
+}
+
+/* Фільтр на мобільних — вертикально, дати в один ряд */
+@media (max-width: 767px) {
+    .fn_ringostat_filter_row .fn_ringostat_filters {
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_date_range {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_date_range .fn_filter_item {
+        flex: 1 1 0;
+        min-width: 0;
+        width: auto;
+        max-width: none;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_date_range .fn_filter_sep {
+        display: inline;
+        flex-shrink: 0;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_item {
+        width: 100%;
+        max-width: 100%;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_date_range .fn_filter_item {
+        width: auto;
+        max-width: none;
+    }
+    .fn_ringostat_filter_row .fn_filter_item_btn {
+        margin-left: 0;
+        flex-wrap: wrap;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_sep {
+        display: none;
+    }
+}
+
+/* Телефон горизонтально (ландшафт): компактний фільтр, без дат; таблиця без колонки «Бізнес номер» */
+@media (max-width: 767px) and (orientation: landscape),
+       (orientation: landscape) and (max-height: 500px) {
+    /* Фільтр дат не показувати в ландшафті на телефоні */
+    .fn_ringostat_filter_row .fn_ringostat_date_range {
+        display: none !important;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_filters {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 6px 8px;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_item {
+        width: auto;
+        max-width: none;
+        flex: 0 0 auto;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_item:first-of-type {
+        width: 120px;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_item:nth-of-type(2) {
+        width: 130px;
+    }
+    .fn_ringostat_filter_row .fn_ringostat_filters > .fn_filter_item:nth-of-type(3) {
+        width: 100px;
+    }
+    /* Колонка «Бізнес номер» не показувати в ландшафті на телефоні */
+    .calls_list .okay_list_heading.okay_list_calls_callee,
+    .calls_list .okay_list_boding.okay_list_calls_callee {
+        display: none !important;
+    }
+    .fn_ringostat_filter_row .fn_filter_item .form-control {
+        padding: 6px 8px;
+        font-size: 13px;
+        min-height: 34px;
+    }
+    .fn_ringostat_filter_row .fn_filter_item_btn {
+        margin-left: auto;
+        flex-wrap: nowrap;
+    }
+    .fn_ringostat_filter_row .fn_filter_item_btn .btn {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+    .boxed_sorting.fn_ringostat_filter_row {
+        padding: 8px 10px;
+    }
+}
+
+/* ========== Журнал дзвінків — сітка ========== */
+.calls_list.okay_list { width: 100%; }
+
+.calls_list .okay_list_head,
+.calls_list .okay_list_row {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-width: 0;
+}
+
+.calls_list .okay_list_heading,
+.calls_list .okay_list_boding {
+    float: none;
+    flex-shrink: 0;
+    padding: 10px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.calls_list .okay_list_calls_date { width: 145px; min-width: 110px; }
+
+.calls_list .okay_list_calls_direction {
+    width: 95px;
+    min-width: 95px;
+    overflow: visible;
+}
+
+.calls_list .okay_list_calls_caller,
+.calls_list .okay_list_calls_callee {
+    width: 152px;
+    min-width: 152px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Випадаючий список замовлень — як notification_toggle в index.tpl */
+.fn_ringostat_orders_dropdown {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.fn_ringostat_orders_inner {
+    position: relative;
+    display: inline-block;
+}
+
+.fn_ringostat_orders_icon.fn_ringostat_orders_trigger {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #00a7ef;
+    padding: 2px;
+}
+
+.fn_ringostat_orders_icon.fn_ringostat_orders_trigger:hover {
+    color: #008abd;
+}
+
+.fn_ringostat_orders_toggle {
+    top: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, top 0.3s ease;
+    position: absolute;
+    width: 220px;
+    max-height: 340px;
+    overflow-y: auto;
+    white-space: normal;
+    border-radius: 8px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid rgba(204, 204, 204, 0.2);
+    background: #fff;
+    box-shadow: 0 4px 6px -1px rgba(136, 136, 136, 0.05), 0 2px 4px -2px rgba(136, 136, 136, 0.1);
+    color: #767676;
+    z-index: 200;
+}
+
+.fn_ringostat_orders_inner:hover > .fn_ringostat_orders_toggle,
+.fn_ringostat_orders_toggle:hover {
+    top: 100%;
+    opacity: 1;
+    visibility: visible;
+}
+
+.fn_ringostat_orders_toggle .notif_item {
+    line-height: inherit;
+    margin: 0;
+    border-bottom: 1px solid rgba(204, 204, 204, 0.2);
+    position: relative;
+    font-size: 14px;
+    width: 100%;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fn_ringostat_orders_toggle .notif_item:last-child {
+    border-bottom: none;
+}
+
+.fn_ringostat_orders_toggle .notif_item .l_notif {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    color: #232830;
+}
+
+.fn_ringostat_orders_toggle .notif_item .l_notif:hover {
+    opacity: 0.8;
+}
+
+.fn_ringostat_orders_toggle .notif_title {
+    padding: 0;
+    cursor: pointer;
+}
+
+.calls_list .okay_list_calls_orders {
+    width: 88px;
+    min-width: 44px;
+    text-align: center;
+    overflow: visible;
+}
+
+.calls_list .okay_list_calls_employee {
+    width: 160px;
+    min-width: 160px;
+    flex: 1;
+}
+
+.calls_list .okay_list_calls_waittime_duration {
+    width: 152px;
+    min-width: 120px;
+    text-align: center;
+}
+
+.calls_list .okay_list_calls_status { width: 162px; min-width: 162px; }
+
+.calls_list .okay_list_calls_status.fn_status_cell .tag.fn_status_label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.calls_list .fn_status_icon {
+    display: inline-flex;
+    flex-shrink: 0;
+}
+.calls_list .fn_status_icon svg {
+    width: 20px;
+    height: 20px;
+}
+.calls_list .fn_status_icon_success { color: #198754; }
+.calls_list .fn_status_icon_warning { color: #fd7e14; }
+.calls_list .fn_status_icon_danger { color: #dc3545; }
+.calls_list .fn_status_icon_info { color: #0dcaf0; }
+.calls_list .fn_status_icon_default { color: #6c757d; }
+
+.calls_list .okay_list_calls_record {
+    width: 68px;
+    min-width: 68px;
+    text-align: center;
+    overflow: visible;
+}
+
+/* Менеджер/Відділ */
+.calls_list .okay_list_calls_employee .calls_employee_fio { display: block; }
+
+.calls_list .okay_list_calls_employee .calls_department {
+    display: block;
+    font-size: .9em;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* Кнопка «Слухати» */
+.calls_list .okay_list_calls_record .btn_close {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.calls_list .okay_list_calls_record .btn_close svg {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    color: #198754;
+    transition: color .1s;
+}
+
+.calls_list .okay_list_calls_record .btn_close:hover svg { color: #157347; }
+
+/* Іконки напрямку */
+.calls_list .direction-icon {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.calls_list .direction-icon_in { color: #0d6efd; }
+.calls_list .direction-icon_out { color: #6c757d; }
+
+/* ========== Модальне вікно запису ========== */
+#fn_ringostat_record_modal .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#fn_ringostat_record_modal .card-header .fn_close_record_modal {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+#fn_ringostat_record_modal .modal-body {
+    padding: 1.5rem;
+}
+
+.ringostat-waveform {
+    width: 100%;
+    margin-bottom: 12px;
+    min-height: 60px;
+}
+
+.ringostat-waveform-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.ringostat-controls-left,
+.ringostat-controls-center,
+.ringostat-controls-right {
+    display: flex;
+    align-items: center;
+    flex: 1 1 0;
+}
+
+.ringostat-controls-left {
+    justify-content: flex-start;
+}
+
+.ringostat-controls-center {
+    justify-content: center;
+}
+
+.ringostat-controls-right {
+    justify-content: flex-end;
+}
+
+.ringostat-waveform-controls .ringostat-waveform-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+}
+
+.ringostat-time {
+    font-size: 13px;
+    color: #666;
+}
+
+.ringostat-icon {
+    display: inline-flex;
+}
+
+.ringostat-icon_pause {
+    display: none;
+}
+
+.ringostat-volume-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Кастомний, компактний range тільки в модалці запису */
+#fn_ringostat_record_modal .ringostat-volume-slider {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent;
+    height: 10px;
+}
+
+.ringostat-volume-slider {
+    max-width: 90px;
+}
+
+#fn_ringostat_record_modal .ringostat-volume-slider:focus {
+    outline: none;
+}
+
+#fn_ringostat_record_modal .ringostat-volume-slider::-webkit-slider-runnable-track {
+    height: 3px;
+    background: #dde7f5;
+    border-radius: 999px;
+}
+
+#fn_ringostat_record_modal .ringostat-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #00a7ef;
+    border: 2px solid #00a7ef;
+    margin-top: -4px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+
+#fn_ringostat_record_modal .ringostat-volume-slider::-moz-range-track {
+    height: 3px;
+    background: #dde7f5;
+    border-radius: 999px;
+}
+
+#fn_ringostat_record_modal .ringostat-volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #00a7ef;
+    border: 2px solid #00a7ef;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+
+#fn_ringostat_record_modal .ringostat-volume-slider::-ms-track {
+    height: 3px;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+#fn_ringostat_record_modal .ringostat-volume-slider::-ms-fill-lower,
+#fn_ringostat_record_modal .ringostat-volume-slider::-ms-fill-upper {
+    height: 3px;
+    background: #dde7f5;
+    border-radius: 999px;
+}
+
+#fn_ringostat_record_modal .ringostat-volume-slider::-ms-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #00a7ef;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+
+.ringostat-volume-mute {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ringostat-volume-mute .icon,
+.ringostat-download-btn .icon {
+    width: 20px;
+    height: 20px;
+    color: #00a7ef;
+    transition: color .15s ease;
+}
+
+.ringostat-volume-mute:hover .icon,
+.ringostat-download-btn:hover .icon {
+    color: #008abd;
+}
+
+.ringostat-icon_volume_off {
+    display: none;
+}
+
+.ringostat-volume-mute.ringostat-muted .ringostat-icon_volume {
+    display: none;
+}
+
+.ringostat-volume-mute.ringostat-muted .ringostat-icon_volume_off {
+    display: inline-flex;
+}
+
+.ringostat-download-btn {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Модальне вікно запису — по центру на мобільних (лише коли відкрите) */
+@media (max-width: 767px) {
+    #fn_ringostat_record_modal.modal.in,
+    #fn_ringostat_record_modal.modal.show {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+    }
+    #fn_ringostat_record_modal .modal-dialog {
+        margin: 0 auto;
+        max-width: calc(100vw - 30px);
+    }
+}
+
+/* ========== Черга передзвону (callback queue) ========== */
+.fn_ringostat_callback_list .okay_list_heading.fn_cq_col_phone {
+    width: 180px;
+    text-align: left;
+}
+
+.fn_ringostat_callback_list .okay_list_heading.fn_cq_col_missed {
+    width: 140px;
+}
+
+.fn_ringostat_callback_list .okay_list_heading.fn_cq_col_last {
+    width: 180px;
+}
+
+.fn_ringostat_callback_list .okay_list_boding.fn_ringostat_phone_cell {
+    width: 180px;
+    text-align: left;
+}
+
+.fn_ringostat_phone_line {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.fn_ringostat_callback_list .okay_list_boding.fn_cq_col_missed {
+    width: 140px;
+}
+
+.fn_ringostat_callback_list .okay_list_boding.fn_cq_col_last {
+    width: 180px;
+}
+
+.fn_ringostat_callback_list .fn_cq_mark_btn {
+    margin-left: 8px;
+}
+
+.fn_ringostat_callback_list .fn_cq_actions .fn_cq_btn_icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.fn_ringostat_callback_list .fn_cq_actions .fn_cq_btn_icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 767px) {
+    .fn_ringostat_callback_list .okay_list_boding.fn_ringostat_phone_cell {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+}
+@media (max-width: 767px) and (orientation: portrait) {
+    .fn_ringostat_callback_list .fn_ringostat_voicemail_icon {
+        display: none;
+    }
+}
+@media (max-width: 767px) {
+    .fn_ringostat_callback_list .okay_list_boding.fn_cq_actions {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 6px;
+        align-items: center;
+    }
+    .fn_ringostat_callback_list .fn_cq_actions .btn {
+        padding: 5px 8px;
+        width: 44px;
+        min-width: 44px;
+        flex-shrink: 0;
+    }
+    .fn_ringostat_callback_list .fn_cq_actions .fn_cq_btn_icon svg {
+        width: 18px;
+        height: 18px;
+        margin-right: 2px;
+    }
+}
+
+/* Планшет (як orders/products при max-width 991px): компактні колонки + горизонтальний скрол */
+@media only screen and (max-width: 991px) {
+    .calls_list.okay_list {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+    .calls_list .okay_list_head,
+    .calls_list .okay_list_row {
+        min-width: 720px;
+    }
+    .calls_list .okay_list_calls_date { width: 120px; min-width: 100px; }
+    .calls_list .okay_list_calls_direction { width: 70px; min-width: 64px; }
+    .calls_list .okay_list_calls_status { width: 132px; min-width: 90px; }
+    .calls_list .okay_list_calls_caller { width: 142px; min-width: 100px; }
+    .calls_list .okay_list_calls_callee { width: 100px; min-width: 85px; }
+    .calls_list .okay_list_calls_orders { width: 70px; min-width: 50px; }
+    .calls_list .okay_list_calls_employee { width: 120px; min-width: 100px; }
+    .calls_list .okay_list_calls_waittime_duration { width: 110px; min-width: 90px; }
+    .calls_list .okay_list_calls_record { width: 60px; min-width: 52px; }
+}
+
+/* Мобільні вертикально (портрет): картка — дата зліва верх, тип справа верх, статус/номер по центру, низ у 3 колонки */
+@media only screen and (max-width: 767px) and (orientation: portrait) {
+    .fn_toggle_wrap .calls_list.okay_list,
+    .fn_toggle_wrap .calls_list .okay_list_body {
+        overflow: visible;
+        max-width: 100%;
+    }
+    .calls_list .okay_list_head {
+        display: none;
+    }
+    .calls_list .okay_list_body_item {
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 6px;
+        margin-bottom: 6px;
+        overflow: visible;
+        background: #fff;
+        width: 100%;
+        max-width: 100%;
+    }
+    .calls_list .okay_list_row {
+        display: grid;
+        grid-template-columns: minmax(0, 0.6fr) 1fr minmax(44px, auto);
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas:
+            "date status status"
+            "caller direction direction"
+            "waittime orders record";
+        gap: 6px 10px;
+        padding: 10px;
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .calls_list .okay_list_boding {
+        padding: 0;
+        overflow: visible;
+        min-width: 0;
+    }
+    .calls_list .okay_list_boding[data-mobile-label]::before {
+        display: none;
+    }
+    /* Верх: дата зліва, статус справа */
+    .calls_list .okay_list_calls_date {
+        grid-area: date;
+        font-size: 0.95em;
+        color: #555;
+        align-self: start;
+        text-align: left;
+    }
+    .calls_list .okay_list_calls_status {
+        grid-area: status;
+        justify-self: end;
+        align-self: start;
+        text-align: right;
+        min-width: 0;
+    }
+    .calls_list .okay_list_calls_status .tag {
+        white-space: nowrap;
+    }
+    .calls_list .okay_list_calls_status .fn_status_text {
+        display: none !important;
+    }
+    .calls_list .okay_list_calls_status .fn_status_icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    /* Номер зліва, тип дзвінку справа */
+    .calls_list .okay_list_calls_caller {
+        grid-area: caller;
+        text-align: left;
+        word-break: break-all;
+        align-self: center;
+    }
+    .calls_list .okay_list_calls_direction {
+        grid-area: direction;
+        justify-self: end;
+        align-self: center;
+        text-align: right;
+    }
+    /* Низ: Очікування/Тривалість зліва, Замовлення центр, Запис справа */
+    .calls_list .okay_list_calls_waittime_duration {
+        grid-area: waittime;
+        font-size: 0.9em;
+        color: #666;
+        align-self: end;
+        text-align: left;
+    }
+    .calls_list .okay_list_calls_orders {
+        grid-area: orders;
+        text-align: center;
+        align-self: end;
+    }
+    .calls_list .okay_list_calls_record {
+        grid-area: record;
+        text-align: right;
+        align-self: end;
+        min-width: 44px;
+    }
+    .calls_list .okay_list_calls_callee,
+    .calls_list .okay_list_calls_employee {
+        display: none !important;
+    }
+}
