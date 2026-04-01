@@ -49,6 +49,7 @@ $lang['sviat__ringostat__status'] = 'Status';
 $lang['sviat__ringostat__record'] = 'Record';
 $lang['sviat__ringostat__missed'] = 'Missed';
 $lang['sviat__ringostat__listen'] = 'Listen';
+$lang['sviat__ringostat__no_record'] = 'No conversation recording';
 $lang['sviat__ringostat__no_calls'] = 'No calls for the selected period.';
 $lang['sviat__ringostat__load_from_ringostat'] = 'Load from Ringostat';
 $lang['sviat__ringostat__force_full_sync'] = 'All records';

@@ -2,11 +2,10 @@
 
 namespace Okay\Modules\Sviat\Ringostat;
 
-use Okay\Core\Config;
 use Okay\Core\EntityFactory;
 use Okay\Core\ManagerMenu;
-use Okay\Core\OkayContainer\Reference\ServiceReference as SR;
 use Okay\Core\Request;
+use Okay\Core\OkayContainer\Reference\ServiceReference as SR;
 use Okay\Core\Settings;
 use Okay\Modules\Sviat\Ringostat\Helpers\RingostatApiClient;
 use Okay\Modules\Sviat\Ringostat\Helpers\RingostatCronHelper;
@@ -36,17 +35,15 @@ return [
             new SR(EntityFactory::class),
             new SR(RingostatApiClient::class),
             new SR(Settings::class),
-            new SR(Request::class),
             new SR(RingostatSettingsHelper::class),
         ],
     ],
     BackendExtender::class => [
         'class' => BackendExtender::class,
         'arguments' => [
-            new SR(RingostatHelper::class),
-            new SR(Config::class),
             new SR(ManagerMenu::class),
             new SR(EntityFactory::class),
+            new SR(Request::class),
         ],
     ],
     FrontendExtender::class => [

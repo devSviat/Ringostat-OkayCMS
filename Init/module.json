@@ -1,9 +1,23 @@
 {
   "Okay": "4.5.2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "moduleName": "Ringostat",
   "vendor": {
     "email": "devsviat@proton.me",
     "site": "https://github.com/devSviat"
+  },
+  "modifications": {
+    "backend": [
+      {
+        "file": "order.tpl",
+        "changes": [
+          {
+            "find": "<div class=\"boxed fn_toggle_wrap min_height_230px fn_step-4\">",
+            "childrenFind": "<div class=\"heading_box\">",
+            "prepend": "order_ringostat_calls.tpl"
+          }
+        ]
+      }
+    ]
   }
 }

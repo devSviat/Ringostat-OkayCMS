@@ -2,6 +2,7 @@
 
 namespace Okay\Modules\Sviat\Ringostat\Init;
 
+use Okay\Admin\Helpers\BackendOrdersHelper;
 use Okay\Core\Modules\AbstractInit;
 use Okay\Core\Modules\EntityField;
 use Okay\Core\Scheduler\Schedule;
@@ -87,6 +88,11 @@ class Init extends AbstractInit
         $this->registerChainExtension(
             ['class' => BackendMainHelper::class, 'method' => 'evensCounters'],
             ['class' => BackendExtender::class, 'method' => 'setCallbackQueueCounter']
+        );
+
+        $this->registerQueueExtension(
+            [BackendOrdersHelper::class, 'findOrder'],
+            [BackendExtender::class, 'findOrder']
         );
 
         $this->registerSchedule(

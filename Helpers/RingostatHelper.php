@@ -4,8 +4,6 @@ namespace Okay\Modules\Sviat\Ringostat\Helpers;
 
 use Okay\Core\EntityFactory;
 use Okay\Core\Phone;
-use Okay\Core\Request;
-use Okay\Entities\OrdersEntity;
 use Okay\Modules\Sviat\Ringostat\Entities\RingostatCallsEntity;
 use Okay\Modules\Sviat\Ringostat\Entities\RingostatCallbackQueueEntity;
 use Okay\Modules\Sviat\Ringostat\Entities\RingostatContactsSyncEntity;
@@ -24,9 +22,6 @@ class RingostatHelper
     /** @var \Okay\Core\Settings */
     private $settings;
 
-    /** @var Request */
-    private $request;
-
     /** @var RingostatSettingsHelper */
     private $settingsHelper;
 
@@ -34,38 +29,12 @@ class RingostatHelper
         EntityFactory $entityFactory,
         RingostatApiClient $apiClient,
         \Okay\Core\Settings $settings,
-        Request $request,
         RingostatSettingsHelper $settingsHelper
     ) {
         $this->entityFactory = $entityFactory;
         $this->apiClient = $apiClient;
         $this->settings = $settings;
-        $this->request = $request;
         $this->settingsHelper = $settingsHelper;
-    }
-
-    /**
-     * Останнє замовлення за номером телефону (для пропущеного дзвінка).
-     */
-    public function findLastOrderByPhone(string $phone): ?object
-    {
-        $cleaned = Phone::clear($phone);
-        if ($cleaned === '') {
-            return null;
-        }
-        /** @var OrdersEntity $ordersEntity */
-        $ordersEntity = $this->entityFactory->get(OrdersEntity::class);
-        $orders = $ordersEntity->find([
-            'keyword' => $cleaned,
-            'order' => 'id DESC',
-            'limit' => 20,
-        ]);
-        foreach ($orders as $order) {
-            if (Phone::clear($order->phone ?? '') === $cleaned) {
-                return $order;
-            }
-        }
-        return null;
     }
 
     public function syncContactFromOrder(object $order): array
@@ -245,84 +214,6 @@ class RingostatHelper
             $this->upsertContactsSync((int)$user->id, $phone ?? '', $fullName, null, 0, 'error');
         }
         return $result;
-    }
-
-    /** Журнал дзвінків API (credentials з налаштувань). @see https://ringostat.readme.io/reference/get_calls-list */
-    public function getCallsList(array $params = []): array
-    {
-        $this->apiClient->setCredentials(
-            $this->settingsHelper->get('api_key') ?: $this->settings->get('sviat__ringostat__auth_key'),
-            $this->settingsHelper->get('project_id') ?: $this->settings->get('sviat__ringostat__project_id')
-        );
-        return $this->apiClient->getCallsList($params);
-    }
-
-    /** Callback: extension (вхідний номер проєкту) → destination. @see https://ringostat.readme.io/reference/post_callback-outward-call */
-    public function callbackOutwardCall(string $extension, string $destination): array
-    {
-        $this->apiClient->setCredentials(
-            $this->settingsHelper->get('api_key') ?: $this->settings->get('sviat__ringostat__auth_key'),
-            $this->settingsHelper->get('project_id') ?: $this->settings->get('sviat__ringostat__project_id')
-        );
-        return $this->apiClient->callbackOutwardCall($extension, $destination);
-    }
-
-    /** Розширений callback (JSON-RPC Callback.external). @see https://ringostat.readme.io/reference/post_a-v2 */
-    public function callbackExternal(array $params): array
-    {
-        $this->apiClient->setCredentials(
-            $this->settingsHelper->get('api_key') ?: $this->settings->get('sviat__ringostat__auth_key'),
-            $this->settingsHelper->get('project_id') ?: $this->settings->get('sviat__ringostat__project_id')
-        );
-        $params['projectId'] = $params['projectId'] ?? $this->settingsHelper->get('project_id') ?? $this->settings->get('sviat__ringostat__project_id');
-        return $this->apiClient->callbackExternal($params);
-    }
-
-    /** SIP-акаунти проєкту Online. */
-    public function getSipOnline(): array
-    {
-        $this->apiClient->setCredentials(
-            $this->settingsHelper->get('api_key') ?: $this->settings->get('sviat__ringostat__auth_key'),
-            $this->settingsHelper->get('project_id') ?: $this->settings->get('sviat__ringostat__project_id')
-        );
-        return $this->apiClient->getSipOnline();
-    }
-
-    /** SIP-акаунти, які зараз у розмові. */
-    public function getSipSpeaking(): array
-    {
-        $this->apiClient->setCredentials(
-            $this->settingsHelper->get('api_key') ?: $this->settings->get('sviat__ringostat__auth_key'),
-            $this->settingsHelper->get('project_id') ?: $this->settings->get('sviat__ringostat__project_id')
-        );
-        return $this->apiClient->getSipSpeaking();
-    }
-
-    /** Відправка організацій у Ringostat (minicrm/organizations/sync). */
-    public function syncOrganizations(array $organizations): array
-    {
-        $this->apiClient->setCredentials(
-            $this->settingsHelper->get('api_key') ?: $this->settings->get('sviat__ringostat__auth_key'),
-            $this->settingsHelper->get('project_id') ?: $this->settings->get('sviat__ringostat__project_id')
-        );
-        $projectId = (int) ($this->settingsHelper->get('project_id') ?: $this->settings->get('sviat__ringostat__project_id'));
-        foreach ($organizations as &$org) {
-            if (!isset($org['projectId'])) {
-                $org['projectId'] = $projectId;
-            }
-        }
-        unset($org);
-        return $this->apiClient->syncOrganizations($organizations);
-    }
-
-    /** Синхронізація контактів (minicrm/contacts/sync). */
-    public function syncContacts(array $contacts): array
-    {
-        $this->apiClient->setCredentials(
-            $this->settingsHelper->get('api_key') ?: $this->settings->get('sviat__ringostat__auth_key'),
-            $this->settingsHelper->get('project_id') ?: $this->settings->get('sviat__ringostat__project_id')
-        );
-        return $this->apiClient->syncContacts($contacts);
     }
 
     /**

@@ -114,4 +114,31 @@ class RingostatCallsEntity extends Entity
 
         return $first && !empty($first->started_at) ? $first->started_at : null;
     }
+
+    /**
+     * Дзвінки з номером клієнта (як у журналі: in→caller, out→callee), не раніше дати/часу замовлення.
+     * Один запит SELECT * — без другого round-trip через find() по id.
+     *
+     * @return array<int, object>
+     */
+    public function findCallsForOrder(string $phoneLike, string $orderDateTime): array
+    {
+        $table = self::getTable();
+        $sql = "SELECT rsc.* FROM `{$table}` AS rsc
+            WHERE rsc.started_at >= :order_from
+            AND (
+                (rsc.direction = 'in' AND rsc.caller LIKE :phone_like)
+                OR (rsc.direction = 'out' AND rsc.callee LIKE :phone_like)
+            )
+            ORDER BY rsc.started_at DESC
+            LIMIT 50";
+
+        $sqlQuery = $this->queryFactory->newSqlQuery();
+        $sqlQuery->setStatement($sql)
+            ->bindValue('order_from', $orderDateTime)
+            ->bindValue('phone_like', $phoneLike);
+        $this->db->query($sqlQuery);
+
+        return $this->db->results() ?: [];
+    }
 }

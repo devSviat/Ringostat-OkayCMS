@@ -49,6 +49,7 @@ $lang['sviat__ringostat__status'] = 'Статус';
 $lang['sviat__ringostat__record'] = 'Запис';
 $lang['sviat__ringostat__missed'] = 'Пропущено';
 $lang['sviat__ringostat__listen'] = 'Слухати';
+$lang['sviat__ringostat__no_record'] = 'Немає запису розмови';
 $lang['sviat__ringostat__no_calls'] = 'Немає дзвінків за обраний період.';
 $lang['sviat__ringostat__load_from_ringostat'] = 'Завантажити з Ringostat';
 $lang['sviat__ringostat__force_full_sync'] = 'Всі записи';
