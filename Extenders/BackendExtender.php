@@ -37,7 +37,7 @@ class BackendExtender implements ExtensionInterface
     {
         /** @var RingostatCallbackQueueEntity $queueEntity */
         $queueEntity = $this->entityFactory->get(RingostatCallbackQueueEntity::class);
-        $this->managerMenu->addCounter('sviat__left_ringostat_callback_queue', $queueEntity->count(['processed' => 0]));
+        $this->managerMenu->addCounter('sviat__left_ringostat_callback_queue', $queueEntity->countCallbackQueue());
     }
 
     /**

@@ -26,6 +26,22 @@ class RingostatBackendHelper
     }
 
     /**
+     * Телефон із форми: E164 (+380…) або самі цифри. Інакше null.
+     * Використовується як ключ рядка в черзі передзвону.
+     */
+    public static function sanitizePhone(string $phone): ?string
+    {
+        $phone = trim($phone);
+        return preg_match('/^\+?\d{9,20}$/', $phone) === 1 ? $phone : null;
+    }
+
+    /** Чи це datetime у форматі БД (Y-m-d H:i:s). */
+    public static function isDbDateTime(string $value): bool
+    {
+        return preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', trim($value)) === 1;
+    }
+
+    /**
      * Дозволений редирект на https або http (запис з Ringostat).
      * http дозволено для локальної розробки та якщо CDN віддає http.
      */
