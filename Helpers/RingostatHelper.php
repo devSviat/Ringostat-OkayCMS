@@ -5,7 +5,6 @@ namespace Okay\Modules\Sviat\Ringostat\Helpers;
 use Okay\Core\EntityFactory;
 use Okay\Core\Phone;
 use Okay\Modules\Sviat\Ringostat\Entities\RingostatCallsEntity;
-use Okay\Modules\Sviat\Ringostat\Entities\RingostatCallbackQueueEntity;
 use Okay\Modules\Sviat\Ringostat\Entities\RingostatContactsSyncEntity;
 
 /**
@@ -234,8 +233,6 @@ class RingostatHelper
 
         /** @var RingostatCallsEntity $callsEntity */
         $callsEntity = $this->entityFactory->get(RingostatCallsEntity::class);
-        /** @var RingostatCallbackQueueEntity $queueEntity */
-        $queueEntity = $this->entityFactory->get(RingostatCallbackQueueEntity::class);
 
         if (!$forceFull) {
             $maxStartedAt = $callsEntity->getMaxStartedAt();
@@ -317,67 +314,9 @@ class RingostatHelper
                 $callsEntity->add($data);
                 $imported++;
             }
-
-            $this->updateCallbackQueueForCall($queueEntity, $data);
         }
 
         return ['success' => true, 'error' => null, 'imported' => $imported, 'updated' => $updated];
-    }
-
-    /** Черга передзвону: пропущений (in+NO ANSWER/VOICEMAIL) → +1; PROPER/ANSWERED → видалити. */
-    private function updateCallbackQueueForCall(RingostatCallbackQueueEntity $queueEntity, object $callData): void
-    {
-        $direction = $callData->direction ?? '';
-        $status = trim($callData->status ?? '');
-        $caller = trim($callData->caller ?? '');
-        $callee = trim($callData->callee ?? '');
-
-        $isMissed = $direction === 'in' && in_array($status, ['NO ANSWER', 'VOICEMAIL'], true);
-        $isAnswered = in_array($status, ['PROPER', 'ANSWERED'], true);
-
-        if ($isMissed) {
-            $clientPhone = $caller;
-        } elseif ($isAnswered) {
-            $clientPhone = $direction === 'in' ? $caller : $callee;
-        } else {
-            return;
-        }
-
-        $normalized = preg_replace('/\D/', '', $clientPhone);
-        if ($normalized === '' || strlen($normalized) < 9 || preg_match('/[a-zA-Z]/', $clientPhone)) {
-            return;
-        }
-
-        $phoneForDb = Phone::toSave($clientPhone);
-        if ($phoneForDb === null) {
-            return;
-        }
-
-        if ($isMissed) {
-            $existing = $queueEntity->findOne(['phone' => $phoneForDb]);
-            $lastMissedAt = $callData->started_at ?? date('Y-m-d H:i:s');
-            if ($existing) {
-                $queueEntity->update($existing->id, (object) [
-                    'missed_count' => (int) $existing->missed_count + 1,
-                    'last_missed_at' => $lastMissedAt,
-                ]);
-            } else {
-                $queueEntity->add((object) [
-                    'phone' => $phoneForDb,
-                    'missed_count' => 1,
-                    'last_missed_at' => $lastMissedAt,
-                    'processed' => 0,
-                ]);
-            }
-            return;
-        }
-
-        if ($isAnswered) {
-            $existing = $queueEntity->findOne(['phone' => $phoneForDb]);
-            if ($existing) {
-                $queueEntity->delete($existing->id);
-            }
-        }
     }
 
     /** Маппінг рядка API calls/list → об'єкт для БД (disposition→status, call_type→direction). */
