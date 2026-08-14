@@ -331,7 +331,6 @@ class RingostatApiClient
         $response = curl_exec($ch);
         $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $err = curl_error($ch);
-        curl_close($ch);
 
         $decoded = null;
         if ($response !== false && $response !== '') {
