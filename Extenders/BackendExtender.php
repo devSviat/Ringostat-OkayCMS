@@ -7,6 +7,7 @@ use Okay\Core\ManagerMenu;
 use Okay\Core\Modules\Extender\ExtensionInterface;
 use Okay\Core\Phone;
 use Okay\Core\Request;
+use Okay\Modules\Sviat\Ringostat\Backend\Helpers\RingostatBackendHelper;
 use Okay\Modules\Sviat\Ringostat\Entities\RingostatCallbackQueueEntity;
 use Okay\Modules\Sviat\Ringostat\Entities\RingostatCallsEntity;
 use Okay\Modules\Sviat\Ringostat\Helpers\RingostatPhoneFormatHelper;
@@ -70,6 +71,7 @@ class BackendExtender implements ExtensionInterface
         }
 
         $order->sviat_ringostat_calls = $calls;
+        $order->sviat_ringostat_player_version = RingostatBackendHelper::recordPlayerVersion();
 
         return $order;
     }

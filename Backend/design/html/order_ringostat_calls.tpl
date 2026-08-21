@@ -47,7 +47,7 @@
                                             </span>
                                         {/if}
                                         {if $call->record_url}
-                                            <button type="button" class="btn_close fn_open_record_modal fn_ringostat_no_row_click fn_ringostat_order_call_record hint-bottom-right-t-info-s-small-mobile hint-anim" data-hint="{$btr->sviat__ringostat__listen|escape}" data-record-href="{$rootUrl}/backend/index.php?controller=Sviat.Ringostat.RingostatCallsAdmin@record&amp;id={$call->id|escape}">
+                                            <button type="button" class="btn_close fn_open_record_modal fn_ringostat_no_row_click fn_ringostat_order_call_record hint-bottom-right-t-info-s-small-mobile hint-anim" data-toggle="modal" data-target="#fn_ringostat_record_modal" data-hint="{$btr->sviat__ringostat__listen|escape}" data-record-href="{$rootUrl}/backend/index.php?controller=Sviat.Ringostat.RingostatCallsAdmin@record&amp;id={$call->id|escape}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 4v16l13 -8l-13 -8" /></svg>
                                             </button>
                                         {else}
@@ -71,5 +71,5 @@
 {include file='../../../Okay/Modules/Sviat/Ringostat/Backend/design/html/ringostat_record_modal.tpl'}
 
 <script src="{$rootUrl}/Okay/Modules/Sviat/Ringostat/Backend/design/js/wavesurfer-7.12.1.min.js"></script>
-<script src="{$rootUrl}/Okay/Modules/Sviat/Ringostat/Backend/design/js/ringostat_record_player.js"></script>
+<script src="{$rootUrl}/Okay/Modules/Sviat/Ringostat/Backend/design/js/ringostat_record_player.js?v={$order->sviat_ringostat_player_version}"></script>
 {/if}

@@ -251,7 +251,7 @@
                                     </div>
                                     <div class="okay_list_boding okay_list_calls_record" data-mobile-label="{$btr->sviat__ringostat__record|escape}:">
                                         {if $call->record_url}
-                                            <button type="button" class="btn_close fn_open_record_modal fn_ringostat_no_row_click hint-bottom-right-t-info-s-small-mobile hint-anim" data-hint="{$btr->sviat__ringostat__listen|escape}" data-record-href="{$root_url}/backend/index.php?controller=Sviat.Ringostat.RingostatCallsAdmin@record&amp;id={$call->id}">
+                                            <button type="button" class="btn_close fn_open_record_modal fn_ringostat_no_row_click hint-bottom-right-t-info-s-small-mobile hint-anim" data-toggle="modal" data-target="#fn_ringostat_record_modal" data-hint="{$btr->sviat__ringostat__listen|escape}" data-record-href="{$root_url}/backend/index.php?controller=Sviat.Ringostat.RingostatCallsAdmin@record&amp;id={$call->id}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 4v16l13 -8l-13 -8" /></svg>
                                             </button>
                                         {else}
@@ -320,4 +320,4 @@
 {include file='ringostat_record_modal.tpl'}
 
 <script src="{$root_url}/Okay/Modules/Sviat/Ringostat/Backend/design/js/wavesurfer-7.12.1.min.js"></script>
-<script src="{$root_url}/Okay/Modules/Sviat/Ringostat/Backend/design/js/ringostat_record_player.js"></script>
+<script src="{$root_url}/Okay/Modules/Sviat/Ringostat/Backend/design/js/ringostat_record_player.js?v={$ringostat_player_version}"></script>

@@ -8,6 +8,18 @@ namespace Okay\Modules\Sviat\Ringostat\Backend\Helpers;
 class RingostatBackendHelper
 {
     /**
+     * Кеш-мітка скрипта плеєра.
+     *
+     * Плеєр підключається прямим тегом, повз бандл, а дерево модулів nginx
+     * віддає з `max-age` на десять років. Без мітки правка файлу не доїжджає
+     * в браузер, який уже його завантажив.
+     */
+    public static function recordPlayerVersion(): int
+    {
+        return (int) @filemtime(dirname(__DIR__) . '/design/js/ringostat_record_player.js');
+    }
+
+    /**
      * Повертає дату у форматі Y-m-d або $default, якщо вхід не валідний.
      */
     public static function sanitizeDateYmd(string $value, string $default): string
