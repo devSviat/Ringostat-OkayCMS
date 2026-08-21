@@ -163,7 +163,7 @@
             }
             currentSrc = href.replace(/&amp;/g, '&');
             resetPlayerUI();
-            $recordModal.modal('show');
+            // Саму модалку відкриває data-toggle на кнопці — драйвер адмінки.
             if (!wavesurfer) {
                 wavesurfer = initWaveSurfer();
             }
@@ -171,21 +171,24 @@
                 wavesurfer.once('ready', function () {
                     wavesurfer.play();
                 });
-                wavesurfer.load(currentSrc);
+                // load() віддає проміс: закриття вікна під час завантаження
+                // перериває запит, і без catch це unhandled rejection у консолі.
+                wavesurfer.load(currentSrc).catch(function () {
+                    if ($recordModal.hasClass('in')) {
+                        $timeDisplay.text('—');
+                    }
+                });
             } else {
                 $timeDisplay.text('—');
             }
         });
 
-        $recordModal.on('shown.bs.modal', function () {
-            if (wavesurfer) {
-                try {
-                    wavesurfer.setOptions({ height: 64 });
-                } catch (err) {}
-            }
-        });
-
-        $recordModal.on('hidden.bs.modal', function () {
+        // Обидві назви навмисно: форк шле власний `hide` (CustomEvent від
+        // a11y-dialog), Bootstrap стокової — `hidden.bs.modal`. Перевірено на
+        // стенді: обробник простого `hide` події Bootstrap НЕ ловить, тож без
+        // другої назви запис на стоку грав би далі після закриття вікна.
+        // Тіло ідемпотентне, тож зайве спрацювання нешкідливе.
+        $recordModal.on('hide hidden.bs.modal', function () {
             if (wavesurfer) {
                 try {
                     wavesurfer.stop();

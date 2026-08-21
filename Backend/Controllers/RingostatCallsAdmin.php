@@ -109,6 +109,8 @@ class RingostatCallsAdmin extends IndexAdmin
         $this->design->assign('sync_imported', $this->request->get('sync_imported', 'integer', null));
         $this->design->assign('sync_updated', $this->request->get('sync_updated', 'integer', null));
 
+        $this->design->assign('ringostat_player_version', RingostatBackendHelper::recordPlayerVersion());
+
         return $this->response->setContent($this->design->fetch('ringostat_calls.tpl'));
     }
 
