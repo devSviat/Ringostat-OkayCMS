@@ -183,7 +183,12 @@
             }
         });
 
-        $recordModal.on('hide', function () {
+        // Обидві назви навмисно: форк шле власний `hide` (CustomEvent від
+        // a11y-dialog), Bootstrap стокової — `hidden.bs.modal`. Перевірено на
+        // стенді: обробник простого `hide` події Bootstrap НЕ ловить, тож без
+        // другої назви запис на стоку грав би далі після закриття вікна.
+        // Тіло ідемпотентне, тож зайве спрацювання нешкідливе.
+        $recordModal.on('hide hidden.bs.modal', function () {
             if (wavesurfer) {
                 try {
                     wavesurfer.stop();
